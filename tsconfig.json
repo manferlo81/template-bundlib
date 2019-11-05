@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "declaration": true,
+    "declarationDir": "types",
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules/**"
+  ]
+}

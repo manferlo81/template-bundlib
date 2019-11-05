@@ -1,0 +1,43 @@
+{
+  "name": "bundlib-starter",
+  "version": "0.0.0",
+  "description": "My awesome library built using Bundlib",
+  "keywords": [],
+  "main": "dist/lib.js",
+  "module": "dist/lib.mjs",
+  "types": "types",
+  "scripts": {
+    "dev": "bundlib -dw",
+    "build": "bundlib",
+    "test": "jest --color -w 3",
+    "prerelease": "npm test",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manferlo81/bundlib-starter.git"
+  },
+  "author": "Manuel Fernandez <manferlo81@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manferlo81/bundlib-starter/issues"
+  },
+  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "devDependencies": {
+    "@types/jest": "^24.0.21",
+    "@types/node": "^12.12.5",
+    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/parser": "^2.6.1",
+    "bundlib": "^0.13.0",
+    "chokidar": "^3.3.0",
+    "eslint": "^6.6.0",
+    "jest": "^24.9.0",
+    "standard-version": "^7.0.0",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.4"
+  }
+}
