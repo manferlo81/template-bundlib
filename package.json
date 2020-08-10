@@ -10,34 +10,37 @@
     "dev": "bundlib -dw",
     "build": "bundlib",
     "test": "jest --color -w 3",
-    "prerelease": "npm test",
+    "clean": "rimraf dist types",
+    "lint": "eslint src/**/*.ts",
+    "prerelease": "npm run clean && npm run lint && npm test && npm run build",
     "release": "standard-version"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/manferlo81/bundlib-starter.git"
+  "devDependencies": {
+    "@types/jest": "^26.0.9",
+    "@types/node": "^14.0.27",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "bundlib": "^0.17.2",
+    "chokidar": "^3.4.2",
+    "eslint": "^7.6.0",
+    "jest": "^26.2.2",
+    "rimraf": "^3.0.2",
+    "standard-version": "^8.0.2",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
   },
-  "author": "Manuel Fernandez <manferlo81@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/manferlo81/bundlib-starter/issues"
-  },
-  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
   "files": [
     "dist",
     "types"
   ],
-  "devDependencies": {
-    "@types/jest": "^24.0.21",
-    "@types/node": "^12.12.5",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
-    "@typescript-eslint/parser": "^2.6.1",
-    "bundlib": "^0.13.0",
-    "chokidar": "^3.3.0",
-    "eslint": "^6.6.0",
-    "jest": "^24.9.0",
-    "standard-version": "^7.0.0",
-    "ts-jest": "^24.1.0",
-    "typescript": "^3.6.4"
-  }
+  "author": "Manuel Fernandez <manferlo81@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manferlo81/bundlib-starter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/manferlo81/bundlib-starter/issues"
+  },
+  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
+  "license": "MIT"
 }
