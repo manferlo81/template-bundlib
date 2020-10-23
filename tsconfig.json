@@ -10,7 +10,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "declarationDir": "types",
+    "declarationMap": true,
   },
   "include": [
     "src",
