@@ -5,12 +5,12 @@
   "keywords": [],
   "main": "dist/lib.js",
   "module": "dist/lib.mjs",
-  "types": "types",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "bundlib -dw",
     "build": "bundlib",
     "test": "jest --color -w 3",
-    "clean": "rimraf dist types",
+    "clean": "rimraf dist",
     "lint": "eslint src/**/*.ts",
     "prerelease": "npm run clean && npm run lint && npm test && npm run build",
     "release": "standard-version"
