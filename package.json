@@ -15,12 +15,16 @@
   "types": "./dist/index.d.ts",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "dev": "bundlib -dw",
+    "clean:cache": "rimraf node_modules/.cache/{bundlib,jest}",
+    "clean:build": "rimraf dist coverage",
+    "clean": "run-p clean:*",
+    "lint:test": "eslint __test__/**/*.ts",
+    "lint:src": "eslint src/**/*.ts",
+    "lint": "run-p lint:*",
     "build": "bundlib",
+    "dev": "bundlib -dw",
     "test": "jest --color -w 3",
-    "clean": "rimraf dist",
-    "lint": "eslint src/**/*.ts",
-    "prerelease": "npm run clean && npm run lint && npm test && npm run build",
+    "prerelease": "run-s clean lint test build",
     "release": "standard-version"
   },
   "devDependencies": {
@@ -32,6 +36,7 @@
     "chokidar": "^3.5.1",
     "eslint": "^7.28.0",
     "jest": "^27.0.4",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "standard-version": "^9.3.0",
     "ts-jest": "^27.0.3",
