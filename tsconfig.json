@@ -4,13 +4,12 @@
     "module": "ES2015",
     "moduleResolution": "Node",
     "esModuleInterop": true,
+    "lib": [],
     "strict": true,
-    "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noUnusedLocals": true,
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": true
   },
   "include": [
     "src",
@@ -18,6 +17,6 @@
     "jest.config.js"
   ],
   "exclude": [
-    "node_modules/**"
+    "node_modules"
   ]
 }

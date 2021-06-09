@@ -19,10 +19,6 @@ plugins:
   - "@typescript-eslint"
 
 rules:
-  indent:
-    - error
-    - 2
-
   linebreak-style:
     - error
     - windows
@@ -30,10 +26,6 @@ rules:
   quotes:
     - error
     - single
-
-  semi:
-    - error
-    - always
 
   comma-dangle:
     - error
@@ -47,3 +39,19 @@ rules:
     - max: 1
       maxBOF: 0
       maxEOF: 0
+
+  semi: "off"
+  "@typescript-eslint/semi":
+    - error
+    - always
+
+  indent: "off"
+  "@typescript-eslint/indent":
+    - error
+    - 2
+
+  "@typescript-eslint/array-type":
+    - error
+    - default: array-simple
+
+  "@typescript-eslint/member-delimiter-style": error
