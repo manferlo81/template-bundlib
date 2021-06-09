@@ -3,9 +3,17 @@
   "version": "0.0.0",
   "description": "My awesome library built using Bundlib",
   "keywords": [],
-  "main": "dist/lib.js",
-  "module": "dist/lib.mjs",
-  "types": "dist/index.d.ts",
+  "type": "commonjs",
+  "exports": {
+    "import": "./dist/lib.mjs",
+    "default": "./dist/lib.cjs"
+  },
+  "main": "./dist/lib.cjs",
+  "module": "./dist/lib.mjs",
+  "jsnext:main": "./dist/lib.mjs",
+  "browser": "./dist/lib.umd.js",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "dev": "bundlib -dw",
     "build": "bundlib",
