@@ -1,22 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "ES2015",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node10",
     "esModuleInterop": true,
     "lib": [],
     "strict": true,
     "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "declaration": true,
-    "declarationMap": true
+    "declarationMap": true,
+    "newLine": "lf"
   },
   "include": [
     "src",
-    "__test__",
-    "jest.config.js"
+    "__test__"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "coverage"
   ]
 }
