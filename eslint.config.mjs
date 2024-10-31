@@ -6,8 +6,8 @@ import { config, configs as typescriptConfigs } from 'typescript-eslint';
 const eslintRules = normalizeRules({
   'no-useless-rename': 'error',
   'object-shorthand': 'error',
-  'no-useless-concat': 'error',
   'prefer-template': 'error',
+  'no-useless-concat': 'error',
 });
 
 const stylisticRules = normalizeRules('@stylistic', {
@@ -50,27 +50,35 @@ export default config(
   { rules: { ...eslintRules, ...stylisticRules, ...typescriptRules } },
 );
 
-function normalizeRuleEntry(entry, ...rest) {
+function normalizeRuleEntry(entry) {
   if (Array.isArray(entry)) return entry;
-  return ['error', 'off', 'warn'].find((severity) => severity === entry) || ['error', entry, ...rest];
+  if (['error', 'off', 'warn'].includes(entry)) return entry;
+  return ['error', entry];
 }
 
 function normalizeRuleEntries(rules, pluginName) {
   const entries = Object.entries(rules).map(
     ([ruleName, ruleEntry]) => [ruleName, normalizeRuleEntry(ruleEntry)],
   );
-  if (!pluginName) return Object.fromEntries(entries);
+  if (!pluginName) return entries;
   const pluginPrefix = `${pluginName}/`;
   const normalizeRuleName = (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName;
     return `${pluginPrefix}${ruleName}`;
   };
+  return entries.map(([ruleName, normalizedRuleEntry]) => [normalizeRuleName(ruleName), normalizedRuleEntry]);
+}
+
+function normalizeRulesObject(rules, pluginName) {
   return Object.fromEntries(
-    entries.map(([ruleName, normalizedRuleEntry]) => [normalizeRuleName(ruleName), normalizedRuleEntry]),
+    normalizeRuleEntries(
+      rules,
+      pluginName,
+    ),
   );
 }
 
 function normalizeRules(pluginOrRules, rules) {
-  if (!rules) return normalizeRuleEntries(pluginOrRules);
-  return normalizeRuleEntries(rules, pluginOrRules);
+  if (!rules) return normalizeRulesObject(pluginOrRules);
+  return normalizeRulesObject(rules, pluginOrRules);
 }
