@@ -1,8 +1,6 @@
-module.exports = {
-
-  testEnvironment: 'node',
+/** @type { import("jest").Config } */
+const config = {
   cacheDirectory: 'node_modules/.cache/jest',
-
   preset: 'ts-jest',
 
   collectCoverage: true,
@@ -10,14 +8,11 @@ module.exports = {
     'src/**',
   ],
   coverageDirectory: 'coverage',
-  coverageReporters: [
-    'json',
-    'lcov',
-    'clover',
-    'text',
-    'text-summary',
-  ],
+  coverageReporters: process.env.CI
+    ? ['json', 'clover', 'cobertura']
+    : ['text', 'html'],
 
   verbose: true,
-
 };
+
+export default config;
