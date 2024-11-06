@@ -12,6 +12,10 @@ const config = {
     ? ['json', 'clover', 'cobertura']
     : ['text', 'html'],
 
+  testMatch: [
+    '**/__test__/**/*.test.ts',
+  ],
+
   verbose: true,
 };
 
