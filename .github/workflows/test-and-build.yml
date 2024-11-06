@@ -10,10 +10,47 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js v20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
   build:
+    strategy:
+      matrix:
+        os:
+          - name: Ubuntu
+            image: ubuntu-latest
+          - name: macOS
+            image: macos-latest
+          - name: Windows
+            image: windows-latest
+
+        node-version:
+          - 18.x
+          - 20.x
+          - 21.x
+          - 22.x
+
     name: Test and Build ( ${{ matrix.os.name }}, Node.js v${{ matrix.node-version }} )
 
     runs-on: ${{ matrix.os.image }}
+    needs: lint
 
     steps:
       - name: Checkout
@@ -32,18 +69,3 @@ jobs:
 
       - name: Build
         run: npm run build
-
-    strategy:
-      matrix:
-        os:
-          - name: Ubuntu
-            image: ubuntu-latest
-          - name: macOS
-            image: macos-latest
-          - name: Windows
-            image: windows-latest
-        node-version:
-          - 18.x
-          - 20.x
-          - 21.x
-          - 22.x
