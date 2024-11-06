@@ -1,7 +1,6 @@
 {
-  "name": "bundlib-starter",
   "version": "0.0.0",
-  "description": "My awesome library built using Bundlib",
+  "private": true,
   "keywords": [],
   "type": "commonjs",
   "exports": {
@@ -22,14 +21,15 @@
     "clean": "run-p clean:*",
     "lint:test": "eslint __test__",
     "lint:src": "eslint src",
+    "lint:config": "eslint *.config.mjs",
     "lint": "run-p lint:*",
-    "test": "jest --color -w 3",
-    "test:watch": "npm run test -- --watch",
-    "dev": "bundlib -dw",
+    "test": "jest --color",
+    "test:watch": "jest --color --watch",
     "build": "bundlib -d",
+    "dev": "bundlib -dw",
     "ci-build": "run-s lint test build",
     "clean-build": "run-s clean ci-build",
-    "prerelease": "run-s clean ci-build",
+    "prerelease": "run-s clean-build",
     "release": "standard-version",
     "prepare": "husky"
   },
@@ -70,6 +70,5 @@
   "bugs": {
     "url": "https://github.com/manferlo81/bundlib-starter/issues"
   },
-  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
-  "license": "MIT"
+  "homepage": "https://github.com/manferlo81/bundlib-starter#readme"
 }
