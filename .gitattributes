@@ -13,6 +13,6 @@
 .*rc        text    eol=lf
 .*ignore    text    eol=lf
 .*config    text    eol=lf
-.gitat*     text    eol=lf
+.gitatt*    text    eol=lf
 LICENSE     text    eol=lf
 .husky/*    text    eol=lf
