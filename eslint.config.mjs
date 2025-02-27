@@ -41,9 +41,16 @@ const typescriptPluginConfig = config(
   typescriptConfigs.strictTypeChecked,
   typescriptConfigs.stylisticTypeChecked,
   {
-    languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: process.cwd() } },
+    languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
     rules: normalizeRules('@typescript-eslint', {
       'array-type': { default: 'array-simple', readonly: 'array-simple' },
+      'restrict-template-expressions': {
+        allowAny: false,
+        allowBoolean: false,
+        allowNever: false,
+        allowNullish: false,
+        allowRegExp: false,
+      },
     }),
   },
   {
