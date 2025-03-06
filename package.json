@@ -15,6 +15,9 @@
   "browser": "./dist/umd/lib.umd.js",
   "types": "./dist/types/index.d.ts",
   "typings": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean:cache": "rimraf --glob node_modules/.cache/{bundlib,jest}",
     "clean:build": "rimraf dist coverage",
@@ -71,5 +74,6 @@
   "bugs": {
     "url": "https://github.com/manferlo81/bundlib-starter/issues"
   },
-  "homepage": "https://github.com/manferlo81/bundlib-starter#readme"
+  "homepage": "https://github.com/manferlo81/bundlib-starter#readme",
+  "license": ""
 }
