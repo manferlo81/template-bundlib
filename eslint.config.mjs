@@ -12,6 +12,7 @@ const javascriptPluginConfig = config(
       'object-shorthand': 'error',
       'prefer-template': 'error',
       'no-useless-concat': 'error',
+      eqeqeq: 'smart',
     }),
   },
 )
