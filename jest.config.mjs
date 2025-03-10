@@ -1,7 +1,8 @@
-/** @type { import("jest").Config } */
+/** @type { import("ts-jest").JestConfigWithTsJest } */
 const config = {
-  cacheDirectory: 'node_modules/.cache/jest',
-  preset: 'ts-jest',
+  transform: {
+    '\\.ts$': ['ts-jest', {}],
+  },
 
   collectCoverage: true,
   collectCoverageFrom: [
@@ -16,6 +17,7 @@ const config = {
     '**/__test__/**/*.test.ts',
   ],
 
+  cacheDirectory: 'node_modules/.cache/jest',
   verbose: true,
 }
 
