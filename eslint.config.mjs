@@ -1,5 +1,6 @@
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
+import pluginImportX from 'eslint-plugin-import-x'
 import globals from 'globals'
 import { config, configs as typescriptConfigs } from 'typescript-eslint'
 
@@ -14,7 +15,19 @@ const javascriptPluginConfig = config(
   }),
 )
 
+const importPluginConfig = config(
+  pluginImportX.flatConfigs.recommended,
+  pluginImportX.flatConfigs.typescript,
+  normalizeRulesConfig('import-x', {
+    'consistent-type-specifier-style': 'error',
+    'no-useless-path-segments': 'error',
+    'no-absolute-path': 'error',
+    'no-cycle': 'error',
+  }),
+)
+
 const stylisticPluginConfig = config(
+  // eslint-disable-next-line import-x/no-named-as-default-member
   pluginStylistic.configs.customize({
     indent: 2,
     semi: false,
@@ -57,6 +70,7 @@ export default config(
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   { files: ['**/*.{js,mjs,cjs,ts}'] },
   javascriptPluginConfig,
+  importPluginConfig,
   stylisticPluginConfig,
   typescriptPluginConfig,
 )
