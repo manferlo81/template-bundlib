@@ -1,8 +1,8 @@
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import pluginImportX from 'eslint-plugin-import-x'
+import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
 import globals from 'globals'
-import { config, configs as typescriptConfigs } from 'typescript-eslint'
+import { config, configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 const javascriptPluginConfig = config(
   pluginJavascript.configs.recommended,
@@ -16,8 +16,8 @@ const javascriptPluginConfig = config(
 )
 
 const importPluginConfig = config(
-  pluginImportX.flatConfigs.recommended,
-  pluginImportX.flatConfigs.typescript,
+  pluginImportConfigs.recommended,
+  pluginImportConfigs.typescript,
   normalizeRulesConfig('import-x', {
     'consistent-type-specifier-style': 'error',
     'no-useless-path-segments': 'error',
@@ -46,8 +46,8 @@ const stylisticPluginConfig = config(
 
 const typescriptPluginConfig = config(
   { files: ['**/*.ts'] },
-  typescriptConfigs.strictTypeChecked,
-  typescriptConfigs.stylisticTypeChecked,
+  pluginTypescriptConfigs.strictTypeChecked,
+  pluginTypescriptConfigs.stylisticTypeChecked,
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   normalizeRulesConfig('@typescript-eslint', {
     'array-type': { default: 'array-simple', readonly: 'array-simple' },
@@ -60,7 +60,7 @@ const typescriptPluginConfig = config(
     },
   }),
   {
-    ...typescriptConfigs.disableTypeChecked,
+    ...pluginTypescriptConfigs.disableTypeChecked,
     files: ['**/*.{js,mjs,cjs}'],
   },
 )
@@ -77,9 +77,11 @@ export default config(
 
 function normalizeRulesConfig(pluginName, rules) {
   if (!rules && pluginName) return normalizeRulesConfig(null, pluginName)
+  const entries = Object.entries(rules)
+  if (!entries.length) return {}
   const normalizeEntry = createEntryNormalizer(pluginName)
-  const entries = Object.entries(rules).map(normalizeEntry)
-  const rulesNormalized = Object.fromEntries(entries)
+  const entriesNormalized = entries.map(normalizeEntry)
+  const rulesNormalized = Object.fromEntries(entriesNormalized)
   return { rules: rulesNormalized }
 }
 
