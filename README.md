@@ -4,20 +4,13 @@ My awesome library built using [Bundlib](https://github.com/manferlo81/bundlib)
 
 ## First steps
 
-### Name and description
-
-The `"name"` and `"description"` fields in `package.json` are missing, make sure to include them before you publish your package.
-
-### Changelog library name
-
-Edit `.versionrc.json` `"header"` field to use the name of your library for CHANGELOG generation
-
-### Choose a license
-
-I DID NOT include a license in this project as it is intended to be used as a template. Generate a LICENSE after you create your project, don't forget to declare it using your `package.json` `"license"` field.
-
-### Before publishing
-
-Make sure to remove your `package.json` `"private"` field declare your GitHub `NPM_TOKEN` secret before publishing your package
+* Add `"name"` and `"description"` fields in `package.json`
+* Remove `"private"` field in `package.json` to be able to publish the package
+* Declare `NPM_TOKEN` in your GitHub Action secrets to be able to publish on new version tag
+* Edit `.versionrc.json` `"header"` field to use the name of your library for CHANGELOG generation
+* Create or generate a `LICENSE` file
+* Declare your license using `"license"` field in `package.json`
+* Edit `"homepage"`, `"repository"` and `"bugs"` fields in `package.json` pointing to the correct URLs
+* Edit `"author"` field in `package.json`
 
 ## LICENSE
