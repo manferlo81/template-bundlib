@@ -16,4 +16,8 @@ Edit `.versionrc.json` `"header"` field to use the name of your library for CHAN
 
 I DID NOT include a license in this project as it is intended to be used as a template. Generate a LICENSE after you create your project, don't forget to declare it using your `package.json` `"license"` field.
 
+### Before publishing
+
+Make sure to remove your `package.json` `"private"` field declare your GitHub `NPM_TOKEN` secret before publishing your package
+
 ## LICENSE

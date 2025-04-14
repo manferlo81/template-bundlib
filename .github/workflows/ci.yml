@@ -4,27 +4,33 @@ on:
   push:
     branches:
       - main
+    tags:
+      - v*.*.*
+
   pull_request:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
-  lint:
+  Lint:
     name: Lint
 
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout, Setup Node.js v20.x and Install dependencies
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
         uses: manferlo81/action-checkout-node-install@v0
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          NODE_VERSION: 20.x
 
       - name: Lint
         run: npm run lint
 
-  build:
+  Test:
     strategy:
       matrix:
         os:
@@ -44,7 +50,7 @@ jobs:
     name: Test and Build ( ${{ matrix.os.name }}, Node.js v${{ matrix.node-version }} )
 
     runs-on: ${{ matrix.os.image }}
-    needs: lint
+    needs: Lint
 
     steps:
       - name: Checkout, Setup Node.js v${{ matrix.node-version }} and Install dependencies
@@ -57,3 +63,57 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  Create_Release:
+    name: Create GitHub Release
+
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: Test
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          NODE_VERSION: 20.x
+
+      - name: Build
+        run: npm run build
+
+      - name: Create tarball
+        run: npm pack
+
+      - name: Create Release
+        uses: manferlo81/action-auto-release@v0
+        with:
+          files: template-bundlib-*.tgz
+
+  Publish_to_npm:
+    name: Publish Package to npm Registry
+
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'tag'
+    needs: Test
+
+    steps:
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+        env:
+          NODE_VERSION: 20.x
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
