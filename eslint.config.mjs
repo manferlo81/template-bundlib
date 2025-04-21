@@ -86,25 +86,21 @@ function normalizeRulesConfig(pluginName, rules) {
 }
 
 function createEntryNormalizer(pluginName) {
-  const normalizeRuleEntry = createRuleEntryNormalizer('error')
   if (!pluginName) return ([ruleName, ruleEntry]) => [ruleName, normalizeRuleEntry(ruleEntry)]
   const normalizeRuleName = createRuleNameNormalizer(pluginName)
   return ([ruleName, ruleEntry]) => [normalizeRuleName(ruleName), normalizeRuleEntry(ruleEntry)]
 }
 
-function createRuleEntryNormalizer(severity) {
-  return (entry) => {
-    if (Array.isArray(entry)) return entry
-    if (['error', 'off', 'warn'].includes(entry)) return entry
-    return [severity, entry]
-  }
+function normalizeRuleEntry(entry) {
+  if (Array.isArray(entry)) return entry
+  if (['error', 'off', 'warn'].includes(entry)) return entry
+  return ['error', entry]
 }
 
 function createRuleNameNormalizer(pluginName) {
   const pluginPrefix = `${pluginName}/`
-  const normalizeRuleName = (ruleName) => {
+  return (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName
     return `${pluginPrefix}${ruleName}`
   }
-  return normalizeRuleName
 }

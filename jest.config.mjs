@@ -1,8 +1,10 @@
+import { createDefaultPreset } from 'ts-jest'
+
+const typescriptJestPreset = createDefaultPreset()
+
 /** @type { import("ts-jest").JestConfigWithTsJest } */
 const config = {
-  transform: {
-    '\\.ts$': ['ts-jest', {}],
-  },
+  ...typescriptJestPreset,
 
   collectCoverage: true,
   collectCoverageFrom: [
