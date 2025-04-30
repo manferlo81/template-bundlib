@@ -27,6 +27,9 @@ const importPluginConfig = config(
 )
 
 const stylisticPluginConfig = config(
+  // Disable rule until @stylistic/eslint-plugin types are fixed
+  // https://github.com/eslint-stylistic/eslint-stylistic/issues/762
+  //
   // eslint-disable-next-line import-x/no-named-as-default-member
   pluginStylistic.configs.customize({
     indent: 2,
@@ -46,9 +49,9 @@ const stylisticPluginConfig = config(
 
 const typescriptPluginConfig = config(
   { files: ['**/*.ts'] },
+  { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   pluginTypescriptConfigs.strictTypeChecked,
   pluginTypescriptConfigs.stylisticTypeChecked,
-  { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   normalizeRulesConfig('@typescript-eslint', {
     'array-type': { default: 'array-simple', readonly: 'array-simple' },
     'restrict-template-expressions': {
@@ -87,20 +90,20 @@ function normalizeRulesConfig(pluginName, rules) {
 
 function createEntryNormalizer(pluginName) {
   if (!pluginName) return ([ruleName, ruleEntry]) => [ruleName, normalizeRuleEntry(ruleEntry)]
-  const normalizeRuleName = createRuleNameNormalizer(pluginName)
+  const normalizeRuleName = createPluginKeyNormalizer(pluginName)
   return ([ruleName, ruleEntry]) => [normalizeRuleName(ruleName), normalizeRuleEntry(ruleEntry)]
+}
+
+function createPluginKeyNormalizer(pluginName) {
+  const pluginPrefix = `${pluginName}/`
+  return (key) => {
+    if (key.startsWith(pluginPrefix)) return key
+    return `${pluginPrefix}${key}`
+  }
 }
 
 function normalizeRuleEntry(entry) {
   if (Array.isArray(entry)) return entry
   if (['error', 'off', 'warn'].includes(entry)) return entry
   return ['error', entry]
-}
-
-function createRuleNameNormalizer(pluginName) {
-  const pluginPrefix = `${pluginName}/`
-  return (ruleName) => {
-    if (ruleName.startsWith(pluginPrefix)) return ruleName
-    return `${pluginPrefix}${ruleName}`
-  }
 }
