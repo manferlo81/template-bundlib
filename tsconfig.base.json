@@ -4,6 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Node10",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "lib": [],
     "strict": true,
@@ -17,7 +18,6 @@
     "newLine": "lf"
   },
   "exclude": [
-    "node_modules",
     "dist",
     "coverage"
   ]
