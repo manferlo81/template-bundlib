@@ -6,31 +6,31 @@ import { config, configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 const javascriptPluginConfig = config(
   pluginJavascript.configs.recommended,
-  normalizeRulesConfig({
-    'no-useless-rename': 'error',
-    'object-shorthand': 'error',
-    'prefer-template': 'error',
-    'no-useless-concat': 'error',
-    eqeqeq: 'smart',
-  }),
+  {
+    rules: normalizeRules({
+      'no-useless-rename': 'error',
+      'object-shorthand': 'error',
+      'prefer-template': 'error',
+      'no-useless-concat': 'error',
+      eqeqeq: 'smart',
+    }),
+  },
 )
 
 const importPluginConfig = config(
   pluginImportConfigs.recommended,
   pluginImportConfigs.typescript,
-  normalizeRulesConfig('import-x', {
-    'consistent-type-specifier-style': 'error',
-    'no-useless-path-segments': 'error',
-    'no-absolute-path': 'error',
-    'no-cycle': 'error',
-  }),
+  {
+    rules: normalizeRules('import-x', {
+      'consistent-type-specifier-style': 'error',
+      'no-useless-path-segments': 'error',
+      'no-absolute-path': 'error',
+      'no-cycle': 'error',
+    }),
+  },
 )
 
 const stylisticPluginConfig = config(
-  // Disable rule until @stylistic/eslint-plugin types match it's exports
-  // https://github.com/eslint-stylistic/eslint-stylistic/issues/762
-  //
-  // eslint-disable-next-line import-x/no-named-as-default-member
   pluginStylistic.configs.customize({
     indent: 2,
     semi: false,
@@ -38,13 +38,15 @@ const stylisticPluginConfig = config(
     quoteProps: 'as-needed',
     braceStyle: '1tbs',
   }),
-  normalizeRulesConfig('@stylistic', {
-    quotes: 'single',
-    'linebreak-style': 'unix',
-    'no-extra-parens': 'all',
-    'no-extra-semi': 'error',
-    'padded-blocks': 'off',
-  }),
+  {
+    rules: normalizeRules('@stylistic', {
+      quotes: 'single',
+      'linebreak-style': 'unix',
+      'no-extra-parens': 'all',
+      'no-extra-semi': 'error',
+      'padded-blocks': 'off',
+    }),
+  },
 )
 
 const typescriptPluginConfig = config(
@@ -52,16 +54,18 @@ const typescriptPluginConfig = config(
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   pluginTypescriptConfigs.strictTypeChecked,
   pluginTypescriptConfigs.stylisticTypeChecked,
-  normalizeRulesConfig('@typescript-eslint', {
-    'array-type': { default: 'array-simple', readonly: 'array-simple' },
-    'restrict-template-expressions': {
-      allowAny: false,
-      allowBoolean: false,
-      allowNever: false,
-      allowNullish: false,
-      allowRegExp: false,
-    },
-  }),
+  {
+    rules: normalizeRules('@typescript-eslint', {
+      'array-type': { default: 'array-simple', readonly: 'array-simple' },
+      'restrict-template-expressions': {
+        allowAny: false,
+        allowBoolean: false,
+        allowNever: false,
+        allowNullish: false,
+        allowRegExp: false,
+      },
+    }),
+  },
   {
     ...pluginTypescriptConfigs.disableTypeChecked,
     files: ['**/*.{js,mjs,cjs}'],
@@ -78,14 +82,11 @@ export default config(
   typescriptPluginConfig,
 )
 
-function normalizeRulesConfig(pluginName, rules) {
-  if (!rules && pluginName) return normalizeRulesConfig(null, pluginName)
-  const entries = Object.entries(rules)
-  if (!entries.length) return {}
+function normalizeRules(pluginName, rules) {
+  if (!rules && pluginName) return normalizeRules(null, pluginName)
   const normalizeEntry = createEntryNormalizer(pluginName)
-  const entriesNormalized = entries.map(normalizeEntry)
-  const rulesNormalized = Object.fromEntries(entriesNormalized)
-  return { rules: rulesNormalized }
+  const entriesNormalized = Object.entries(rules).map(normalizeEntry)
+  return Object.fromEntries(entriesNormalized)
 }
 
 function createEntryNormalizer(pluginName) {
