@@ -1,36 +1,52 @@
+import { defineConfig, globalIgnores } from '@eslint/config-helpers'
+import globals from 'globals'
+
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
 import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
-import globals from 'globals'
-import { config, configs as pluginTypescriptConfigs } from 'typescript-eslint'
+import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
-const javascriptPluginConfig = config(
+// Javascript Plugin
+
+const rulesPluginJavascript = normalizeRules({
+  'no-useless-rename': 'error',
+  'object-shorthand': 'error',
+  'prefer-template': 'error',
+  'no-useless-concat': 'error',
+  eqeqeq: 'smart',
+})
+
+const configPluginJavascript = defineConfig(
   pluginJavascript.configs.recommended,
-  {
-    rules: normalizeRules({
-      'no-useless-rename': 'error',
-      'object-shorthand': 'error',
-      'prefer-template': 'error',
-      'no-useless-concat': 'error',
-      eqeqeq: 'smart',
-    }),
-  },
+  { rules: rulesPluginJavascript },
 )
 
-const importPluginConfig = config(
+// Import Plugin
+
+const rulesPluginImport = normalizeRules('import-x', {
+  'consistent-type-specifier-style': 'error',
+  'no-useless-path-segments': 'error',
+  'no-absolute-path': 'error',
+  'no-cycle': 'error',
+})
+
+const configPluginImport = defineConfig(
   pluginImportConfigs.recommended,
   pluginImportConfigs.typescript,
-  {
-    rules: normalizeRules('import-x', {
-      'consistent-type-specifier-style': 'error',
-      'no-useless-path-segments': 'error',
-      'no-absolute-path': 'error',
-      'no-cycle': 'error',
-    }),
-  },
+  { rules: rulesPluginImport },
 )
 
-const stylisticPluginConfig = config(
+// Stylistic Plugin
+
+const rulesPluginStylistic = normalizeRules('@stylistic', {
+  quotes: 'single',
+  'linebreak-style': 'unix',
+  'no-extra-parens': 'all',
+  'no-extra-semi': 'error',
+  'padded-blocks': 'off',
+})
+
+const configPluginStylistic = defineConfig(
   pluginStylistic.configs.customize({
     indent: 2,
     semi: false,
@@ -38,52 +54,55 @@ const stylisticPluginConfig = config(
     quoteProps: 'as-needed',
     braceStyle: '1tbs',
   }),
-  {
-    rules: normalizeRules('@stylistic', {
-      quotes: 'single',
-      'linebreak-style': 'unix',
-      'no-extra-parens': 'all',
-      'no-extra-semi': 'error',
-      'padded-blocks': 'off',
-    }),
-  },
+  { rules: rulesPluginStylistic },
 )
 
-const typescriptPluginConfig = config(
+// Typescript Plugin
+
+const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
+  'array-type': Object.fromEntries(['default', 'readonly'].map((key) => [key, 'array-simple'])),
+  'restrict-template-expressions': {
+    allowAny: false,
+    allowBoolean: false,
+    allowNever: false,
+    allowNullish: false,
+    allowRegExp: false,
+  },
+})
+
+const configPluginTypescript = defineConfig(
   { files: ['**/*.ts'] },
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   pluginTypescriptConfigs.strictTypeChecked,
   pluginTypescriptConfigs.stylisticTypeChecked,
-  {
-    rules: normalizeRules('@typescript-eslint', {
-      'array-type': { default: 'array-simple', readonly: 'array-simple' },
-      'restrict-template-expressions': {
-        allowAny: false,
-        allowBoolean: false,
-        allowNever: false,
-        allowNullish: false,
-        allowRegExp: false,
-      },
-    }),
-  },
-  {
-    ...pluginTypescriptConfigs.disableTypeChecked,
-    files: ['**/*.{js,mjs,cjs}'],
-  },
+  { rules: rulesPluginTypescript },
 )
 
-export default config(
-  { ignores: ['dist', 'coverage'] },
+const configDisableJavascriptTypeCheck = defineConfig({
+  ...pluginTypescriptConfigs.disableTypeChecked,
+  files: ['**/*.{js,mjs,cjs}'],
+})
+
+// Configuration
+
+export default defineConfig(
+  globalIgnores(['dist', 'coverage']),
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   { files: ['**/*.{js,mjs,cjs,ts}'] },
-  javascriptPluginConfig,
-  importPluginConfig,
-  stylisticPluginConfig,
-  typescriptPluginConfig,
+  configPluginJavascript,
+  configPluginStylistic,
+  configPluginImport,
+  configPluginTypescript,
+  configDisableJavascriptTypeCheck,
 )
 
+// Helper Functions
+
 function normalizeRules(pluginName, rules) {
-  if (!rules && pluginName) return normalizeRules(null, pluginName)
+  if (!rules && pluginName) {
+    const actualRules = pluginName
+    return normalizeRules(null, actualRules)
+  }
   const normalizeEntry = createEntryNormalizer(pluginName)
   const entriesNormalized = Object.entries(rules).map(normalizeEntry)
   return Object.fromEntries(entriesNormalized)
@@ -103,8 +122,8 @@ function createPluginKeyNormalizer(pluginName) {
   }
 }
 
-function normalizeRuleEntry(entry) {
+function normalizeRuleEntry(entry, ...more) {
   if (Array.isArray(entry)) return entry
   if (['error', 'off', 'warn'].includes(entry)) return entry
-  return ['error', entry]
+  return ['error', entry, ...more]
 }
