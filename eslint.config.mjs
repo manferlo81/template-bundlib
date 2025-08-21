@@ -3,7 +3,8 @@ import globals from 'globals'
 
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript'
+import { createNodeResolver, flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
 import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 // Javascript Plugin
@@ -30,7 +31,13 @@ const rulesPluginImport = normalizeRules('import-x', {
   'no-cycle': 'error',
 })
 
+const resolversPluginImport = [
+  createTypeScriptImportResolver(),
+  createNodeResolver(),
+]
+
 const configPluginImport = defineConfig(
+  { settings: { 'import-x/resolver-next': resolversPluginImport } },
   pluginImportConfigs.recommended,
   pluginImportConfigs.typescript,
   { rules: rulesPluginImport },
@@ -78,10 +85,9 @@ const configPluginTypescript = defineConfig(
   { rules: rulesPluginTypescript },
 )
 
-const configDisableJavascriptTypeCheck = defineConfig({
-  ...pluginTypescriptConfigs.disableTypeChecked,
-  files: ['**/*.{js,mjs,cjs}'],
-})
+const configDisableJavascriptTypeCheck = defineConfig(
+  { ...pluginTypescriptConfigs.disableTypeChecked, files: ['**/*.{js,mjs,cjs}'] },
+)
 
 // Configuration
 
