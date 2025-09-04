@@ -2,9 +2,6 @@
   "header": "# template-bundlib changelog\n\n## Changes\n",
   "types": [
     {
-      "type": "chore"
-    },
-    {
       "type": "feat",
       "section": "Features"
     },

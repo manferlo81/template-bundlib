@@ -33,6 +33,8 @@
     "dev": "bundlib -dw",
     "ci-build": "run-s lint test build",
     "clean-build": "run-s clean ci-build",
+    "predry-release": "run-s clean-build",
+    "dry-release": "standard-version --dry-run",
     "prerelease": "run-s clean-build",
     "release": "standard-version",
     "prepare": "husky"
