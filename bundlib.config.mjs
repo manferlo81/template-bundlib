@@ -1,5 +1,5 @@
-import { config } from 'bundlib'
+import { defineConfig } from 'bundlib'
 
-export default config({
+export default defineConfig({
   project: './tsconfig.build.json',
 })
