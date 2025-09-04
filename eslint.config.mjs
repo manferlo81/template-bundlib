@@ -1,4 +1,4 @@
-import { defineConfig, globalIgnores } from '@eslint/config-helpers'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import globals from 'globals'
 
 import pluginJavascript from '@eslint/js'
@@ -10,10 +10,10 @@ import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 // Javascript Plugin
 
 const rulesPluginJavascript = normalizeRules(null, {
-  'no-useless-rename': 'error',
-  'object-shorthand': 'error',
-  'prefer-template': 'error',
-  'no-useless-concat': 'error',
+  'no-useless-rename': 'on',
+  'object-shorthand': 'on',
+  'prefer-template': 'on',
+  'no-useless-concat': 'on',
   eqeqeq: 'smart',
 })
 
@@ -25,10 +25,10 @@ const configPluginJavascript = defineConfig(
 // Import Plugin
 
 const rulesPluginImport = normalizeRules('import-x', {
-  'consistent-type-specifier-style': 'error',
-  'no-useless-path-segments': 'error',
-  'no-absolute-path': 'error',
-  'no-cycle': 'error',
+  'consistent-type-specifier-style': 'on',
+  'no-useless-path-segments': 'on',
+  'no-absolute-path': 'on',
+  'no-cycle': 'on',
 })
 
 const resolversPluginImport = [
@@ -49,7 +49,7 @@ const rulesPluginStylistic = normalizeRules('@stylistic', {
   quotes: 'single',
   'linebreak-style': 'unix',
   'no-extra-parens': 'all',
-  'no-extra-semi': 'error',
+  'no-extra-semi': 'on',
   'padded-blocks': 'off',
 })
 
@@ -72,11 +72,13 @@ const configPluginStylistic = defineConfig(
 const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
   'array-type': Object.fromEntries(['default', 'readonly'].map((key) => [key, 'array-simple'])),
   'restrict-template-expressions': {
-    allowAny: false,
+    allowNumber: true,
     allowBoolean: false,
-    allowNever: false,
     allowNullish: false,
     allowRegExp: false,
+    allowArray: false,
+    allowAny: false,
+    allowNever: false,
   },
 })
 
@@ -108,12 +110,13 @@ export default defineConfig(
 // Helper Functions
 
 function normalizeRules(pluginName, rules) {
-  const normalizeEntry = createEntryNormalizer(pluginName)
-  const entriesNormalized = Object.entries(rules).map(normalizeEntry)
+  const normalizeObjectEntry = createObjectEntryNormalizer(pluginName)
+  const entries = Object.entries(rules)
+  const entriesNormalized = entries.map(normalizeObjectEntry)
   return Object.fromEntries(entriesNormalized)
 }
 
-function createEntryNormalizer(pluginName) {
+function createObjectEntryNormalizer(pluginName) {
   if (!pluginName) return ([ruleName, ruleEntry]) => [ruleName, normalizeRuleEntry(ruleEntry)]
   const normalizeRuleName = createPluginKeyNormalizer(pluginName)
   return ([ruleName, ruleEntry]) => [normalizeRuleName(ruleName), normalizeRuleEntry(ruleEntry)]
@@ -127,8 +130,21 @@ function createPluginKeyNormalizer(pluginName) {
   }
 }
 
-function normalizeRuleEntry(entry, ...more) {
-  if (Array.isArray(entry)) return entry
-  if (['error', 'off', 'warn'].includes(entry)) return entry
-  return ['error', entry, ...more]
+function normalizeRuleEntry(entry) {
+  if (entry === 'on' || entry === true) return 'error'
+  if (entry === false) return 'off'
+
+  if (Array.isArray(entry)) {
+    const [first] = entry
+    if (isRuleSeverityString(first)) return entry
+    return ['error', ...entry]
+  }
+
+  if (isRuleSeverityString(entry)) return entry
+
+  return ['error', entry]
+}
+
+function isRuleSeverityString(entry) {
+  return ['error', 'off', 'warn'].includes(entry)
 }
