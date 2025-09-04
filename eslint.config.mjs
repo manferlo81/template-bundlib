@@ -9,7 +9,7 @@ import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
 // Javascript Plugin
 
-const rulesPluginJavascript = normalizeRules({
+const rulesPluginJavascript = normalizeRules(null, {
   'no-useless-rename': 'error',
   'object-shorthand': 'error',
   'prefer-template': 'error',
@@ -55,11 +55,14 @@ const rulesPluginStylistic = normalizeRules('@stylistic', {
 
 const configPluginStylistic = defineConfig(
   pluginStylistic.configs.customize({
+    quotes: 'single',
     indent: 2,
     semi: false,
     arrowParens: true,
     quoteProps: 'as-needed',
     braceStyle: '1tbs',
+    commaDangle: 'always-multiline',
+    jsx: false,
   }),
   { rules: rulesPluginStylistic },
 )
@@ -105,10 +108,6 @@ export default defineConfig(
 // Helper Functions
 
 function normalizeRules(pluginName, rules) {
-  if (!rules && pluginName) {
-    const actualRules = pluginName
-    return normalizeRules(null, actualRules)
-  }
   const normalizeEntry = createEntryNormalizer(pluginName)
   const entriesNormalized = Object.entries(rules).map(normalizeEntry)
   return Object.fromEntries(entriesNormalized)
