@@ -2,7 +2,7 @@ import { sum } from '../src'
 
 describe('sum function', () => {
 
-  test('should return 0 if only no argument provided', () => {
+  test('should return 0 if no argument provided', () => {
     expect(sum()).toBe(0)
   })
 
@@ -15,7 +15,7 @@ describe('sum function', () => {
   })
 
   test('should add multiple numbers', () => {
-    expect(sum(7, 4, 1, 2)).toBe(7 + 4 + 1 + 2)
+    expect(sum(7, -4, 1, 2)).toBe(7 - 4 + 1 + 2)
   })
 
 })

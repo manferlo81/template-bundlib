@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // Module
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node10",
@@ -7,12 +8,15 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "lib": [],
+    "verbatimModuleSyntax": true,
+    // Strict
     "strict": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    // Others
     "declaration": true,
     "declarationMap": true,
     "newLine": "lf"
