@@ -25,7 +25,7 @@ const configPluginJavascript = defineConfig(
 // Import Plugin
 
 const rulesPluginImport = normalizeRules('import-x', {
-  'consistent-type-specifier-style': 'on',
+  'consistent-type-specifier-style': 'prefer-top-level',
   'no-useless-path-segments': 'on',
   'no-absolute-path': 'on',
   'no-cycle': 'on',
@@ -80,6 +80,7 @@ const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
     allowAny: false,
     allowNever: false,
   },
+  'consistent-type-imports': 'on',
 })
 
 const configPluginTypescript = defineConfig(
