@@ -81,6 +81,7 @@ const rulesPluginTypescript = normalizeRules('@typescript-eslint', {
     allowNever: false,
   },
   'consistent-type-imports': 'on',
+  'no-confusing-void-expression': { ignoreVoidReturningFunctions: true },
 })
 
 const configPluginTypescript = defineConfig(
