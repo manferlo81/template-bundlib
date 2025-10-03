@@ -14,12 +14,33 @@ const rulesPluginJavascript = ruleNormalizer()({
   'prefer-template': 'on',
   'no-useless-concat': 'on',
   eqeqeq: 'smart',
+  'no-inner-declarations': ['functions', { blockScopedFunctions: 'disallow' }],
+  'no-unassigned-vars': 'on',
+  'no-unmodified-loop-condition': 'on',
+  'no-unreachable-loop': 'on',
+  'no-useless-assignment': 'on',
+  curly: ['on', 'multi-line'],
+  'no-array-constructor': 'on',
+  'no-else-return': { allowElseIf: false },
+  'no-eval': 'on',
+  'no-new-func': 'on',
+  'no-object-constructor': 'on',
+  'no-useless-computed-key': 'on',
+  'no-var': 'on',
+  'prefer-const': 'on',
+  'prefer-exponentiation-operator': 'on',
+  'prefer-object-has-own': 'on',
+  'prefer-regex-literals': 'on',
+  'require-await': 'on',
 })
 
-const configPluginJavascript = defineConfig(
-  pluginJavascript.configs.recommended,
-  { rules: rulesPluginJavascript },
-)
+const configPluginJavascript = defineConfig({
+  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
+  extends: [
+    pluginJavascript.configs.recommended,
+  ],
+  rules: rulesPluginJavascript,
+})
 
 // Plugin Import
 
@@ -30,12 +51,15 @@ const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
   'no-cycle': 'on',
 })
 
-const configPluginImport = defineConfig(
-  { settings: { 'import/resolver': { typescript: true } } },
-  pluginImportConfigs.recommended,
-  pluginImportConfigs.typescript,
-  { rules: rulesPluginImport },
-)
+const configPluginImport = defineConfig({
+  files: ['**/*.{ts,mts,cts,tsx}'],
+  settings: { 'import/resolver': { node: true, typescript: true } },
+  extends: [
+    pluginImportConfigs.recommended,
+    pluginImportConfigs.typescript,
+  ],
+  rules: rulesPluginImport,
+})
 
 // Plugin Stylistic
 
@@ -48,17 +72,18 @@ const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
   'padded-blocks': 'off',
 })
 
-const customConfigPluginStylistic = pluginStylistic.configs.customize({
-  arrowParens: true,
-  quoteProps: 'as-needed',
-  braceStyle: '1tbs',
-  jsx: false,
+const configPluginStylistic = defineConfig({
+  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
+  extends: [
+    pluginStylistic.configs.customize({
+      arrowParens: true,
+      quoteProps: 'as-needed',
+      braceStyle: '1tbs',
+      jsx: false,
+    }),
+  ],
+  rules: rulesPluginStylistic,
 })
-
-const configPluginStylistic = defineConfig(
-  customConfigPluginStylistic,
-  { rules: rulesPluginStylistic },
-)
 
 // Plugin Typescript
 
@@ -77,17 +102,14 @@ const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
   'no-confusing-void-expression': { ignoreVoidReturningFunctions: true },
 })
 
-const configPluginTypescript = defineConfig(
-  { files: ['**/*.{ts,cts,mts}'] },
-  { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
-  pluginTypescriptConfigs.strictTypeChecked,
-  pluginTypescriptConfigs.stylisticTypeChecked,
-  { rules: rulesPluginTypescript },
-)
-
-const configDisableJavascriptTypeCheck = defineConfig({
-  ...pluginTypescriptConfigs.disableTypeChecked,
-  files: ['**/*.{js,mjs,cjs}'],
+const configPluginTypescript = defineConfig({
+  files: ['**/*.{ts,mts,cts,tsx}'],
+  languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
+  extends: [
+    pluginTypescriptConfigs.strictTypeChecked,
+    pluginTypescriptConfigs.stylisticTypeChecked,
+  ],
+  rules: rulesPluginTypescript,
 })
 
 // Configuration
@@ -95,12 +117,10 @@ const configDisableJavascriptTypeCheck = defineConfig({
 export default defineConfig(
   globalIgnores(['dist', 'coverage']),
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  { files: ['**/*.{js,mjs,cjs}', '**/*.{ts,cts,mts}'] },
   configPluginJavascript,
   configPluginStylistic,
   configPluginImport,
   configPluginTypescript,
-  configDisableJavascriptTypeCheck,
 )
 
 // Helper Function
