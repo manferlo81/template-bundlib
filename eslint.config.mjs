@@ -3,11 +3,10 @@ import globals from 'globals'
 
 import pluginJavascript from '@eslint/js'
 import pluginStylistic from '@stylistic/eslint-plugin'
-import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript'
-import { createNodeResolver, flatConfigs as pluginImportConfigs } from 'eslint-plugin-import-x'
+import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import'
 import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
-// Javascript Plugin
+// Plugin Javascript
 
 const rulesPluginJavascript = ruleNormalizer()({
   'no-useless-rename': 'on',
@@ -22,28 +21,23 @@ const configPluginJavascript = defineConfig(
   { rules: rulesPluginJavascript },
 )
 
-// Import Plugin
+// Plugin Import
 
-const rulesPluginImport = ruleNormalizer({ plugin: 'import-x' })({
+const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
   'consistent-type-specifier-style': 'prefer-top-level',
   'no-useless-path-segments': 'on',
   'no-absolute-path': 'on',
   'no-cycle': 'on',
 })
 
-const resolversPluginImport = [
-  createTypeScriptImportResolver(),
-  createNodeResolver(),
-]
-
 const configPluginImport = defineConfig(
-  { settings: { 'import-x/resolver-next': resolversPluginImport } },
+  { settings: { 'import/resolver': { typescript: true } } },
   pluginImportConfigs.recommended,
   pluginImportConfigs.typescript,
   { rules: rulesPluginImport },
 )
 
-// Stylistic Plugin
+// Plugin Stylistic
 
 const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
   indent: ['on', 2],
@@ -66,7 +60,7 @@ const configPluginStylistic = defineConfig(
   { rules: rulesPluginStylistic },
 )
 
-// Typescript Plugin
+// Plugin Typescript
 
 const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
   'array-type': { default: 'array-simple', readonly: 'array-simple' },
@@ -84,7 +78,7 @@ const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
 })
 
 const configPluginTypescript = defineConfig(
-  { files: ['**/*.ts'] },
+  { files: ['**/*.{ts,cts,mts}'] },
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
   pluginTypescriptConfigs.strictTypeChecked,
   pluginTypescriptConfigs.stylisticTypeChecked,
@@ -101,7 +95,7 @@ const configDisableJavascriptTypeCheck = defineConfig({
 export default defineConfig(
   globalIgnores(['dist', 'coverage']),
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  { files: ['**/*.{js,mjs,cjs,ts}'] },
+  { files: ['**/*.{js,mjs,cjs}', '**/*.{ts,cts,mts}'] },
   configPluginJavascript,
   configPluginStylistic,
   configPluginImport,
