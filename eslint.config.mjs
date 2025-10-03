@@ -42,49 +42,6 @@ const configPluginJavascript = defineConfig({
   rules: rulesPluginJavascript,
 })
 
-// Plugin Import
-
-const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
-  'consistent-type-specifier-style': 'prefer-top-level',
-  'no-useless-path-segments': 'on',
-  'no-absolute-path': 'on',
-  'no-cycle': 'on',
-})
-
-const configPluginImport = defineConfig({
-  files: ['**/*.{ts,mts,cts,tsx}'],
-  settings: { 'import/resolver': { node: true, typescript: true } },
-  extends: [
-    pluginImportConfigs.recommended,
-    pluginImportConfigs.typescript,
-  ],
-  rules: rulesPluginImport,
-})
-
-// Plugin Stylistic
-
-const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
-  indent: ['on', 2],
-  quotes: 'single',
-  'linebreak-style': 'unix',
-  'no-extra-parens': 'all',
-  'no-extra-semi': 'on',
-  'padded-blocks': 'off',
-})
-
-const configPluginStylistic = defineConfig({
-  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
-  extends: [
-    pluginStylistic.configs.customize({
-      arrowParens: true,
-      quoteProps: 'as-needed',
-      braceStyle: '1tbs',
-      jsx: false,
-    }),
-  ],
-  rules: rulesPluginStylistic,
-})
-
 // Plugin Typescript
 
 const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
@@ -112,15 +69,68 @@ const configPluginTypescript = defineConfig({
   rules: rulesPluginTypescript,
 })
 
+// Plugin Import
+
+const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
+  'consistent-type-specifier-style': 'prefer-top-level',
+  'no-useless-path-segments': 'on',
+  'no-absolute-path': 'on',
+  'no-cycle': 'on',
+})
+
+const configPluginImportJavascript = defineConfig({
+  files: ['**/*.{js,mjs,cjs,jsx}'],
+  languageOptions: { sourceType: 'module', ecmaVersion: 'latest' },
+  settings: { 'import/resolver': { node: true, typescript: true } },
+  extends: [
+    pluginImportConfigs.recommended,
+  ],
+  rules: rulesPluginImport,
+})
+
+const configPluginImportTypescript = defineConfig({
+  files: ['**/*.{ts,mts,cts,tsx}'],
+  settings: { 'import/resolver': { node: true, typescript: true } },
+  extends: [
+    pluginImportConfigs.recommended,
+    pluginImportConfigs.typescript,
+  ],
+  rules: rulesPluginImport,
+})
+
+// Plugin Stylistic
+
+const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
+  indent: ['on', 2],
+  quotes: 'single',
+  'linebreak-style': 'unix',
+  'no-extra-parens': 'all',
+  'no-extra-semi': 'on',
+  'padded-blocks': 'off',
+})
+
+const configPluginStylistic = defineConfig({
+  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
+  extends: [
+    pluginStylistic.configs.customize({
+      arrowParens: true,
+      quoteProps: 'as-needed',
+      braceStyle: '1tbs',
+    }),
+  ],
+  rules: rulesPluginStylistic,
+})
+
 // Configuration
 
 export default defineConfig(
   globalIgnores(['dist', 'coverage']),
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   configPluginJavascript,
-  configPluginStylistic,
-  configPluginImport,
   configPluginTypescript,
+  configPluginImportJavascript,
+  configPluginImportTypescript,
+  configPluginStylistic,
 )
 
 // Helper Function
