@@ -6,6 +6,14 @@ import pluginStylistic from '@stylistic/eslint-plugin'
 import { flatConfigs as pluginImportConfigs } from 'eslint-plugin-import'
 import { configs as pluginTypescriptConfigs } from 'typescript-eslint'
 
+// Constants
+
+const JS_PATTERN = '**/*.{js,mjs,cjs,jsx}'
+const TS_PATTERN = '**/*.{ts,mts,cts,tsx}'
+
+const TS_FILES = [TS_PATTERN]
+const ALL_FILES = [JS_PATTERN, TS_PATTERN]
+
 // Plugin Javascript
 
 const rulesPluginJavascript = ruleNormalizer()({
@@ -35,7 +43,7 @@ const rulesPluginJavascript = ruleNormalizer()({
 })
 
 const configPluginJavascript = defineConfig({
-  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
+  files: ALL_FILES,
   extends: [
     pluginJavascript.configs.recommended,
   ],
@@ -56,11 +64,14 @@ const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
     allowNever: false,
   },
   'consistent-type-imports': 'on',
+  'consistent-type-exports': {
+    fixMixedExportsWithInlineTypeSpecifier: false,
+  },
   'no-confusing-void-expression': { ignoreVoidReturningFunctions: true },
 })
 
 const configPluginTypescript = defineConfig({
-  files: ['**/*.{ts,mts,cts,tsx}'],
+  files: TS_FILES,
   languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
   extends: [
     pluginTypescriptConfigs.strictTypeChecked,
@@ -78,18 +89,9 @@ const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
   'no-cycle': 'on',
 })
 
-const configPluginImportJavascript = defineConfig({
-  files: ['**/*.{js,mjs,cjs,jsx}'],
+const configPluginImport = defineConfig({
+  files: ALL_FILES,
   languageOptions: { sourceType: 'module', ecmaVersion: 'latest' },
-  settings: { 'import/resolver': { node: true, typescript: true } },
-  extends: [
-    pluginImportConfigs.recommended,
-  ],
-  rules: rulesPluginImport,
-})
-
-const configPluginImportTypescript = defineConfig({
-  files: ['**/*.{ts,mts,cts,tsx}'],
   settings: { 'import/resolver': { node: true, typescript: true } },
   extends: [
     pluginImportConfigs.recommended,
@@ -110,7 +112,7 @@ const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
 })
 
 const configPluginStylistic = defineConfig({
-  files: ['**/*.{js,mjs,cjs,jsx}', '**/*.{ts,mts,cts,tsx}'],
+  files: ALL_FILES,
   extends: [
     pluginStylistic.configs.customize({
       arrowParens: true,
@@ -128,8 +130,7 @@ export default defineConfig(
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   configPluginJavascript,
   configPluginTypescript,
-  configPluginImportJavascript,
-  configPluginImportTypescript,
+  configPluginImport,
   configPluginStylistic,
 )
 
