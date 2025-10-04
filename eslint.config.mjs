@@ -94,6 +94,7 @@ const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
   'no-useless-path-segments': 'on',
   'no-absolute-path': 'on',
   'no-cycle': 'on',
+  'no-nodejs-modules': 'on',
 })
 
 const configPluginImport = defineConfig({
