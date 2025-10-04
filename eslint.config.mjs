@@ -31,6 +31,7 @@ const rulesPluginJavascript = ruleNormalizer()({
   'no-array-constructor': 'on',
   'no-else-return': { allowElseIf: false },
   'no-eval': 'on',
+  'no-implied-eval': 'on',
   'no-new-func': 'on',
   'no-object-constructor': 'on',
   'no-useless-computed-key': 'on',
@@ -40,6 +41,11 @@ const rulesPluginJavascript = ruleNormalizer()({
   'prefer-object-has-own': 'on',
   'prefer-regex-literals': 'on',
   'require-await': 'on',
+  'no-unused-expressions': 'on',
+  'no-useless-constructor': 'on',
+  'no-throw-literal': 'on',
+  'prefer-rest-params': 'on',
+  'prefer-spread': 'on',
 })
 
 const configPluginJavascript = defineConfig({
