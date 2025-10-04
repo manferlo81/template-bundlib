@@ -69,6 +69,7 @@ const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
     allowAny: false,
     allowNever: false,
   },
+  'unified-signatures': { ignoreDifferentlyNamedParameters: true },
   'consistent-type-imports': 'on',
   'consistent-type-exports': {
     fixMixedExportsWithInlineTypeSpecifier: false,
