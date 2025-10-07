@@ -23,6 +23,7 @@ const configPluginJavascript = defineConfig({
     'no-implied-eval': 'on',
     'no-new-func': 'on',
     'no-unmodified-loop-condition': 'on',
+    'no-bitwise': { allow: ['~', '^', '>>>'] },
     eqeqeq: 'smart',
     // Style
     'no-var': 'on',
