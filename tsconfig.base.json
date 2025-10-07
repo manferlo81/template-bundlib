@@ -11,11 +11,11 @@
     "verbatimModuleSyntax": true,
     // Strict
     "strict": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
+    "noImplicitReturns": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "allowUnreachableCode": false,
+    "noPropertyAccessFromIndexSignature": true,
     // Others
     "declaration": true,
     "declarationMap": true,

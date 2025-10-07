@@ -16,88 +16,82 @@ const ALL_FILES = [JS_PATTERN, TS_PATTERN]
 
 // Plugin Javascript
 
-const rulesPluginJavascript = ruleNormalizer()({
-  'no-useless-rename': 'on',
-  'object-shorthand': 'on',
-  'prefer-template': 'on',
-  'no-useless-concat': 'on',
-  eqeqeq: 'smart',
-  'no-inner-declarations': ['functions', { blockScopedFunctions: 'disallow' }],
-  'no-unassigned-vars': 'on',
-  'no-unmodified-loop-condition': 'on',
-  'no-unreachable-loop': 'on',
-  'no-useless-assignment': 'on',
-  curly: ['on', 'multi-line'],
-  'no-array-constructor': 'on',
-  'no-else-return': { allowElseIf: false },
-  'no-eval': 'on',
-  'no-implied-eval': 'on',
-  'no-new-func': 'on',
-  'no-object-constructor': 'on',
-  'no-useless-computed-key': 'on',
-  'no-var': 'on',
-  'prefer-const': 'on',
-  'prefer-exponentiation-operator': 'on',
-  'prefer-object-has-own': 'on',
-  'prefer-regex-literals': 'on',
-  'require-await': 'on',
-  'no-unused-expressions': 'on',
-  'no-useless-constructor': 'on',
-  'no-throw-literal': 'on',
-  'prefer-rest-params': 'on',
-  'prefer-spread': 'on',
-})
-
 const configPluginJavascript = defineConfig({
+  rules: ruleNormalizer()({
+    // Safety
+    'no-eval': 'on',
+    'no-implied-eval': 'on',
+    'no-new-func': 'on',
+    'no-unmodified-loop-condition': 'on',
+    eqeqeq: 'smart',
+    // Style
+    'no-var': 'on',
+    'prefer-const': 'on',
+    'no-unassigned-vars': 'on',
+    'prefer-template': 'on',
+    'prefer-rest-params': 'on',
+    'prefer-spread': 'on',
+    'no-throw-literal': 'on',
+    'prefer-exponentiation-operator': 'on',
+    curly: ['on', 'multi-line'],
+    'require-await': 'on',
+    'prefer-object-has-own': 'on',
+    'prefer-regex-literals': 'on',
+    'no-array-constructor': 'on',
+    'no-object-constructor': 'on',
+    'no-inner-declarations': ['functions', { blockScopedFunctions: 'disallow' }],
+    // Useless code
+    'no-useless-rename': 'on',
+    'object-shorthand': 'on',
+    'no-unreachable-loop': 'on',
+    'no-useless-concat': 'on',
+    'no-unused-expressions': 'on',
+    'no-useless-computed-key': 'on',
+    'no-useless-constructor': 'on',
+    'no-useless-return': 'on',
+    'no-useless-assignment': 'on',
+    'no-else-return': { allowElseIf: false },
+  }),
   files: ALL_FILES,
   extends: [
     pluginJavascript.configs.recommended,
   ],
-  rules: rulesPluginJavascript,
 })
 
 // Plugin Typescript
 
-const rulesPluginTypescript = ruleNormalizer({ plugin: '@typescript-eslint' })({
-  'array-type': { default: 'array-simple', readonly: 'array-simple' },
-  'restrict-template-expressions': {
-    allowNumber: true,
-    allowBoolean: false,
-    allowNullish: false,
-    allowRegExp: false,
-    allowArray: false,
-    allowAny: false,
-    allowNever: false,
-  },
-  'unified-signatures': { ignoreDifferentlyNamedParameters: true },
-  'consistent-type-imports': 'on',
-  'consistent-type-exports': {
-    fixMixedExportsWithInlineTypeSpecifier: false,
-  },
-  'no-confusing-void-expression': { ignoreVoidReturningFunctions: true },
-})
-
 const configPluginTypescript = defineConfig({
+  rules: ruleNormalizer({ plugin: '@typescript-eslint' })({
+    'array-type': { default: 'array-simple', readonly: 'array-simple' },
+    'restrict-template-expressions': {
+      allowBoolean: false,
+      allowNullish: false,
+      allowRegExp: false,
+      allowAny: false,
+    },
+    'unified-signatures': { ignoreDifferentlyNamedParameters: true },
+    'consistent-type-imports': 'on',
+    'consistent-type-exports': 'on',
+    'no-confusing-void-expression': { ignoreVoidReturningFunctions: true },
+  }),
   files: TS_FILES,
   languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
   extends: [
     pluginTypescriptConfigs.strictTypeChecked,
     pluginTypescriptConfigs.stylisticTypeChecked,
   ],
-  rules: rulesPluginTypescript,
 })
 
 // Plugin Import
 
-const rulesPluginImport = ruleNormalizer({ plugin: 'import' })({
-  'consistent-type-specifier-style': 'prefer-top-level',
-  'no-useless-path-segments': 'on',
-  'no-absolute-path': 'on',
-  'no-cycle': 'on',
-  'no-nodejs-modules': 'on',
-})
-
 const configPluginImport = defineConfig({
+  rules: ruleNormalizer({ plugin: 'import' })({
+    'consistent-type-specifier-style': 'prefer-top-level',
+    'no-useless-path-segments': 'on',
+    'no-absolute-path': 'on',
+    'no-cycle': 'on',
+    'no-nodejs-modules': 'on',
+  }),
   files: ALL_FILES,
   languageOptions: { sourceType: 'module', ecmaVersion: 'latest' },
   settings: { 'import/resolver': { node: true, typescript: true } },
@@ -105,21 +99,19 @@ const configPluginImport = defineConfig({
     pluginImportConfigs.recommended,
     pluginImportConfigs.typescript,
   ],
-  rules: rulesPluginImport,
 })
 
 // Plugin Stylistic
 
-const rulesPluginStylistic = ruleNormalizer({ plugin: '@stylistic' })({
-  indent: ['on', 2],
-  quotes: 'single',
-  'linebreak-style': 'unix',
-  'no-extra-parens': 'all',
-  'no-extra-semi': 'on',
-  'padded-blocks': 'off',
-})
-
 const configPluginStylistic = defineConfig({
+  rules: ruleNormalizer({ plugin: '@stylistic' })({
+    indent: ['on', 2],
+    quotes: 'single',
+    'linebreak-style': 'unix',
+    'no-extra-parens': 'all',
+    'no-extra-semi': 'on',
+    'padded-blocks': 'off',
+  }),
   files: ALL_FILES,
   extends: [
     pluginStylistic.configs.customize({
@@ -128,7 +120,6 @@ const configPluginStylistic = defineConfig({
       braceStyle: '1tbs',
     }),
   ],
-  rules: rulesPluginStylistic,
 })
 
 // Configuration
@@ -142,38 +133,54 @@ export default defineConfig(
   configPluginStylistic,
 )
 
-// Helper Function
+// Helpers
 
 function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginName } = {}) {
 
-  const isDefaultSeverity = (ruleEntry) => {
-    return ruleEntry === 'error' || ruleEntry === 'warn' || ruleEntry === 1 || ruleEntry === 2
+  // Throw TypeError if default severity is not valid
+  const isDefaultSeverity = (entry) => ['error', 'warn', 1, 2].includes(entry)
+  if (!isDefaultSeverity(defaultSeverity)) throw new TypeError('Invalid default severity.')
+
+  // User severity resolver
+  const resolveSeverity = (entry) => {
+
+    // Resolve to default severity if entry is "on" or true
+    if (entry === 'on' || entry === true) return [true, defaultSeverity]
+
+    // Resolve to "off" if entry is false
+    if (entry === false) return [true, 'off']
+
+    // Resolve to entry if it's a valid severity
+    return [entry === 'off' || entry === 0 || isDefaultSeverity(entry), entry]
   }
 
-  if (!isDefaultSeverity(defaultSeverity)) throw new TypeError('Default severity has to be "error", "warn", 1, or 2')
+  // Rule entry normalizer
+  const normalizeRuleEntry = (entry) => {
 
-  const resolveSeverity = (ruleEntry) => {
-    if (ruleEntry === 'on' || ruleEntry === true) return [defaultSeverity, true]
-    if (ruleEntry === false) return ['off', true]
-    if (ruleEntry === 'off' || ruleEntry === 0 || isDefaultSeverity(ruleEntry)) return [ruleEntry, true]
-    return [ruleEntry, false]
-  }
-
-  const normalizeRuleEntry = (ruleEntry) => {
-    const [severity, isValidSeverity] = resolveSeverity(ruleEntry)
-
+    // Return severity if it resolves to a valid severity
+    const [isValidSeverity, severity] = resolveSeverity(entry)
     if (isValidSeverity) return severity
 
-    if (Array.isArray(ruleEntry)) {
-      const [first, ...rest] = ruleEntry
-      const [severity, isValidSeverity] = resolveSeverity(first)
+    // Process entry as array
+    if (Array.isArray(entry)) {
+
+      // Return default severity if array is empty
+      if (!entry.length) return defaultSeverity
+
+      // Return severity rule first element resolves to a valid severity
+      const [first, ...rest] = entry
+      const [isValidSeverity, severity] = resolveSeverity(first)
       if (isValidSeverity) return [severity, ...rest]
-      return [defaultSeverity, ...ruleEntry]
+
+      // Return default severity rule with options
+      return [defaultSeverity, ...entry]
     }
 
-    return [defaultSeverity, ruleEntry]
+    // Return default severity rule with one option
+    return [defaultSeverity, entry]
   }
 
+  // Rule normalizer factory
   const createRuleNormalizer = (normalizeObjectEntry) => {
     return (rules) => {
       const entries = Object.entries(rules)
@@ -182,26 +189,30 @@ function ruleNormalizer({ severity: defaultSeverity = 'error', plugin: pluginNam
     }
   }
 
+  // Return simplified normalizer if no plugin defined
   if (!pluginName) {
     return createRuleNormalizer(
-      ([ruleName, ruleEntry]) => [
+      ([ruleName, entry]) => [
         ruleName,
-        normalizeRuleEntry(ruleEntry),
+        normalizeRuleEntry(entry),
       ],
     )
   }
 
+  // Declare plugin prefix
   const pluginPrefix = `${pluginName}/`
 
+  // Rule name normalizer
   const normalizeRuleName = (ruleName) => {
     if (ruleName.startsWith(pluginPrefix)) return ruleName
     return `${pluginPrefix}${ruleName}`
   }
 
+  // Return rule normalizer
   return createRuleNormalizer(
-    ([ruleName, ruleEntry]) => [
+    ([ruleName, entry]) => [
       normalizeRuleName(ruleName),
-      normalizeRuleEntry(ruleEntry),
+      normalizeRuleEntry(entry),
     ],
   )
 
