@@ -47,7 +47,7 @@
     "@types/node": "^24.6.2",
     "bundlib": "^0.21.7",
     "chokidar": "^4.0.3",
-    "core-js": "^3.45.1",
+    "core-js": "^3.46.0",
     "eslint": "^9.36.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
