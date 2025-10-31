@@ -17,6 +17,9 @@ updates:
     groups:
       lint:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
         patterns:
           - eslint
           - globals
@@ -26,28 +29,39 @@ updates:
           - eslint-plugin-*
           - eslint-*
 
-      types:
-        dependency-type: development
-        patterns:
-          - "@types/*"
-
       test:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
         patterns:
           - jest
           - ts-jest
+          - "@types/jest"
 
-      babel:
+      types:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "@types/*"
+          - typescript
+
+      build:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
         patterns:
           - "@babel/*"
           - core-js
+          - bundlib
 
-      others:
+      other-deps:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
         patterns:
-          - rimraf
-          - npm-run-all
-          - chokidar
-          - husky
-          - standard-version
+          - "*"
