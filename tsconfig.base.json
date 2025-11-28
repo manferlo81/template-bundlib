@@ -1,21 +1,23 @@
 {
   "compilerOptions": {
     // Module
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node10",
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node10",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-    "lib": [],
+    "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
+    "lib": [],
     // Strict
     "strict": true,
     "noImplicitReturns": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "noPropertyAccessFromIndexSignature": true,
+    "noFallthroughCasesInSwitch": true,
     // Others
     "declaration": true,
     "declarationMap": true,
